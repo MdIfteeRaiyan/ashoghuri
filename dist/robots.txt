@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /404.html
+Sitemap: https://asho-ghuri-bd.mahfuz085-cuet.chatgpt.site/sitemap.xml
