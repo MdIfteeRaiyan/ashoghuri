@@ -161,7 +161,7 @@
   installImageSearch();
   /* One small, dismissible travel thought per browser session. */
   function addTravelThought(){if(!document.body)return;try{if(sessionStorage.getItem("agh-travel-thought-seen"))return;sessionStorage.setItem("agh-travel-thought-seen","1")}catch(_){return}var bn=lang()==="bn",toast=document.createElement("aside");toast.className="agh-travel-thought";toast.setAttribute("role","status");toast.setAttribute("aria-live","polite");toast.innerHTML='<span class="agh-thought-icon" aria-hidden="true">✦</span><span class="agh-thought-copy"><small>'+(bn?"আজকের ভ্রমণ ভাবনা":"A LITTLE TRAVEL THOUGHT")+'</small><strong>'+(bn?"পথটা একটু ধীরে চলুন—স্মৃতিগুলো ঠিকই জমে যাবে।":"Take the road slowly; the memories will catch up.")+'</strong></span><button type="button" aria-label="'+(bn?"বন্ধ করুন":"Dismiss")+'">×</button>';document.body.appendChild(toast);var dismiss=toast.querySelector("button"),timer=setTimeout(function(){toast.classList.add("is-leaving");setTimeout(function(){toast.remove()},350)},8500);dismiss.addEventListener("click",function(){clearTimeout(timer);toast.remove()});setTimeout(function(){toast.classList.add("is-visible")},1400)}
-  setTimeout(addTravelThought,500);
+  // Keep the first viewport unobstructed; travel tips stay in page content.
   var enhancementStyle=document.createElement("style");enhancementStyle.textContent=`
     .agh-search-wrap{position:relative;z-index:20}.agh-search-wrap:focus-within{z-index:60}
     .agh-search-list{position:absolute;z-index:80;top:calc(100% + 7px);left:0;right:0;max-height:min(390px,55vh);overflow:auto;padding:5px;background:#fffefa;border:1px solid #dfe5d8;border-radius:15px;box-shadow:0 16px 40px rgba(21,47,39,.18);overscroll-behavior:contain}
@@ -287,6 +287,8 @@
     #modalContent .trip-total-notice{margin:5px 0!important;padding:7px 9px!important;gap:3px!important;line-height:1.4!important}
     #modalContent .trip-total-notice strong{font-size:11px!important;line-height:1.3!important}
     #modalContent .trip-total-notice>span,#modalContent .trip-estimate-more>span{font-size:10px!important;line-height:1.4!important}
+    #modalContent .trip-estimate-notice{display:grid!important;grid-template-columns:minmax(0,1fr);gap:4px!important;align-items:start}
+    #modalContent .trip-estimate-notice>strong,#modalContent .trip-estimate-notice>span,#modalContent .trip-estimate-notice>details{display:block!important;min-width:0;margin:0!important}
     #modalContent .trip-estimate-more summary{font-size:10px;cursor:pointer}
     html[data-theme="dark"] #modalContent .cost-plan-head .cost-plan-state{background:#293a2e!important;color:#e3eee4!important}
     html[data-theme="dark"] #modalContent .trip-estimate-more summary{color:#bfe4c5!important}
@@ -309,6 +311,14 @@
     html[data-theme="dark"] .commons-gallery{background:#17221c!important;border-color:#79927a!important}
     html[data-theme="dark"] .photo-stage{background:#101713!important;border-color:#9eb598!important}
     html[data-theme="dark"] .photo-thumbnails button{border-color:#6f856f!important}
+    /* Compact the gallery and make every slideshow control use one border treatment. */
+    .commons-gallery .photo-stage,.photo-showcase .photo-stage{height:clamp(150px,30vh,270px)!important;min-height:0!important;aspect-ratio:16/8.5}
+    .commons-gallery .photo-showcase-controls button,.photo-showcase .photo-showcase-controls button,.commons-gallery .photo-thumb,.photo-showcase .photo-thumb{box-sizing:border-box;border:1px solid #91a887!important;border-radius:10px;background:#fbfcf8;color:#214d3e;box-shadow:none}
+    .commons-gallery .photo-showcase-controls button:hover,.photo-showcase .photo-showcase-controls button:hover,.commons-gallery .photo-thumb:hover,.photo-showcase .photo-thumb:hover{border-color:#2e7047!important;background:#eef4e9;box-shadow:0 0 0 1px #d3e5cc}
+    .commons-gallery .photo-showcase-controls button:focus-visible,.photo-showcase .photo-showcase-controls button:focus-visible,.commons-gallery .photo-thumb:focus-visible,.photo-showcase .photo-thumb:focus-visible{outline:3px solid #badb9d;outline-offset:2px}
+    .commons-gallery .photo-thumb[aria-current="true"],.photo-showcase .photo-thumb[aria-current="true"]{border:2px solid #2e7047!important;box-shadow:0 0 0 2px #d3e5cc!important}
+    html[data-theme="dark"] .commons-gallery .photo-showcase-controls button,html[data-theme="dark"] .photo-showcase .photo-showcase-controls button,html[data-theme="dark"] .commons-gallery .photo-thumb,html[data-theme="dark"] .photo-showcase .photo-thumb{background:#17221c;color:#edf3ea;border-color:#6f856f!important}
+    @media(max-height:760px){#modalBackdrop .modal-head{padding:7px 14px!important}#modalBackdrop .modal-head .kicker{display:none}#modalBackdrop .modal-head h2{font-size:19px!important;line-height:1.25;margin:0!important}#modalBackdrop .modal-head p{font-size:11px;line-height:1.25;margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.commons-gallery .photo-stage,.photo-showcase .photo-stage{height:clamp(140px,28vh,220px)!important}}
     /* High contrast for dark theme across search, filters, cards, forms and detail sheets. */
     html[data-theme="dark"] body{color:#f0f5ef!important}
     html[data-theme="dark"] :is(.topline,.nav-links a,.hero-copy,.section-head p,.search-help,.search-box label,.search-box .search-field>span,.search-advanced summary,.search-advanced-fields label,.budget-filter-help,.result-count,.card-region,.card-desc,.card-tags,.card-bottom .budget small,.duration,.kicker,.insight p,.footer-copy,.footer-credit,.footer-mini small,.modal-head p,.detail-summary,.fact small,.modal-columns p,.modal-columns li,.budget-note,.cost-plan-detail,.cost-source-list em,.profile-source>small,.expense-field,.expense-micro,.fare-chart-note,.fare-source-guidance,.expense-row span,.expense-caveat,.agh-budget-progress span){color:#c7d3c8!important}

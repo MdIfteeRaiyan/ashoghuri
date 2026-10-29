@@ -96,12 +96,14 @@ for(const file of htmlFiles){
     assert((html.match(/class="expense-line /g)||[]).length===7,`${rel}: generated page does not show all 7 expense categories`);
     assert(/Full trip total unavailable/.test(html),`${rel}: full-trip-total limitation is not clearly stated`);
     assert(!/Illustration fallback; no verified destination photo yet/.test(html),`${rel}: outdated photo fallback copy remains`);
+    assert(!/class="expense-source-label"/.test(html),`${rel}: source labels should be consolidated in the collapsed source list`);
   }
   assert(/<title>[^<]+<\/title>/i.test(html),`${rel}: missing title`);
   assert(/<meta name="description" content="[^"]+"/i.test(html),`${rel}: missing description`);
   assert(/<link rel="canonical" href="https:\/\//i.test(html),`${rel}: missing canonical`);
   assert(/property="og:title"/.test(html)&&/property="og:image"/.test(html),`${rel}: missing social metadata`);
-  assert(/<h1\b/i.test(html),`${rel}: missing H1`);
+  const h1Count=(html.match(/<h1\b/gi)||[]).length;
+  assert(h1Count===1,`${rel}: expected exactly one page-level H1; found ${h1Count}`);
   const attrs=[...html.matchAll(/\b(?:href|src)=["']([^"']+)["']/gi)];
   for(const m of attrs){const target=toTarget(file,m[1]);if(target&&!routeNames.has(target))errors.push(`${rel}: broken local link ${m[1]} → ${target}`)}
 }
@@ -111,6 +113,16 @@ assert(/saveData|effectiveType/.test(await readFile(path.join(dist,'site-runtime
 assert(allFiles.some(f=>f.endsWith('/service-worker.js')),'Service worker is missing');
 const worker=await readFile(path.join(dist,'service-worker.js'),'utf8');
 assert(worker.includes('commons.wikimedia.org'),'Service worker does not cache Wikimedia file redirects');
+const sharedCss=await readFile(path.join(dist,'site-extras.css'),'utf8');
+assert(sharedCss.includes('.photo-showcase .photo-stage{height:clamp(210px,36vh,340px)'),'Photo gallery preview is not constrained for normal viewport height');
+assert(sharedCss.includes('.commons-gallery .photo-stage,.photo-showcase .photo-stage{height:clamp(150px,30vh,270px)'),'Trip details photo gallery is not constrained for normal desktop height');
+assert(sharedCss.includes('.photo-showcase-controls button:focus-visible'),'Photo slideshow controls need a visible keyboard focus state');
+const siteExtras=await readFile(path.join(dist,'site-extras.js'),'utf8');
+assert(siteExtras.includes('trip-estimate-notice>span,#modalContent .trip-estimate-notice>details{display:block!important'),'Destination cost scope text must render on its own readable line');
+assert(!siteExtras.includes('setTimeout(addTravelThought,500)'),'A floating travel tip must not cover the first viewport');
+const safetyHtml=await readFile(path.join(dist,'safety.html'),'utf8');
+assert(/<details class="hotline-source-disclosure">/.test(safetyHtml),'Official hotline sources should be collapsed by default');
+assert(!/<div class="hotline-sources">/.test(safetyHtml.replace(/<details class="hotline-source-disclosure">[\s\S]*?<\/details>/,'')),'Hotline source links are duplicated outside the collapsed source group');
 
 if(errors.length){console.error(`Validation failed with ${errors.length} error(s):`);for(const error of errors)console.error(`- ${error}`);process.exit(1)}
 console.log(`Validation passed: ${places.length} place records, ${htmlFiles.length} HTML files, ${sitemapUrls.length} sitemap URLs, image/cost source checks, PWA metadata and local links.`);
