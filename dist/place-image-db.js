@@ -6061,3 +6061,35 @@ window.AshoGhuriPlaceImageDB = {
     "searchUrl": "https://commons.wikimedia.org/wiki/Special:MediaSearch?type=image&search=Patenga%20%26%20the%20riverfront%20Chattogram"
   }
 };
+/* Reviewed image fixes for exact place matches; remaining records use explicit illustrations. */
+;(function(){
+  var d=window.AshoGhuriPlaceImageDB;
+  function add(id,name,bn,district,title,author,license,page){
+    var thumbnail='https://commons.wikimedia.org/wiki/Special:FilePath/'+encodeURIComponent(title)+'?width=960';
+    d[id]={id:id,name:name,bn:bn,district:district,status:'curated_match',thumbnail:thumbnail,photos:[{title:title,thumbnail:thumbnail,page:page,author:author,license:license,source:'Wikimedia Commons',reviewedAt:'2026-10-29'}]};
+  }
+  add('herbaria-ecotourism-centre','Herbaria Ecotourism Centre','হারবাড়িয়া ইকোট্যুরিজম কেন্দ্র','Bagerhat','হারবাড়িয়া ইকো ট্যুরিজম পার্ক,সুন্দরবন।.jpg','Riads08','CC BY-SA 4.0','https://commons.wikimedia.org/wiki/File:হারবাড়িয়া_ইকো_ট্যুরিজম_পার্ক,সুন্দরবন।.jpg');
+  add('kotka-ecotourism-centre','Kotka Ecotourism Centre','কটকা ইকোট্যুরিজম কেন্দ্র','Bagerhat','Kotka sea beach.jpg','Md. Rifat Hasan Jihan','CC BY-SA 4.0','https://commons.wikimedia.org/wiki/File:Kotka_sea_beach.jpg');
+  add('lauchapara-eco-spot','Lauchapara Eco Spot','লাউচাপাড়া ইকো স্পট','Jamalpur','Lauchapra.jpg','Rahmat Rumon','CC0','https://commons.wikimedia.org/wiki/File:Lauchapra.jpg');
+  add('dharmapal-rajbari','Dharmapal Rajbari','ধর্মপাল রাজবাড়ি','Nilphamari','ধর্মপালের গড় এর পাশে খাল.jpg','Md. Sarwar Ul Islam Fakir','CC BY-SA 4.0','https://commons.wikimedia.org/wiki/File:ধর্মপালের_গড়_এর_পাশে_খাল.jpg');
+  add('sir-pc-roy-house','Sir P. C. Roy’s House','স্যার পি. সি. রায়ের বাড়ি','Khulna','SIR PC ROY HOUSE.jpg','MD. SOHAG HOSEN','CC BY-SA 4.0','https://commons.wikimedia.org/wiki/File:SIR_PC_ROY_HOUSE.jpg');
+  add('raja-tonkanath-temple','Raja Tonkanath Temple','রাজা টংকনাথের মন্দির','Thakurgaon','রাজা টংকনাথের রাজবাড়ি.jpg','Alif Arefur','CC BY-SA 4.0','https://commons.wikimedia.org/wiki/File:রাজা_টংকনাথের_রাজবাড়ি.jpg');
+  add('medha-kachhapia-national-park','Medha Kachhapia National Park','মেধাকচ্ছপিয়া জাতীয় উদ্যান','Cox’s Bazar','গর্জন গাছ.jpg','Jerin Sultana','CC BY-SA 4.0','https://commons.wikimedia.org/wiki/File:গর্জন_গাছ.jpg');
+  var fallbacks={
+    'santoshpur-eco-park':['landscape','No exact openly licensed photo was verified.'],
+    'kochikhali-tiger-point':['forest','No still photo with verified place match was cleared for reuse.'],
+    'andharmanik-ecotourism-centre':['restricted','The site is reported closed or under construction; no visitor photo is used.'],
+    'balapur-zamindar-house':['heritage','No exact openly licensed photo was verified.'],
+    'kamini-roy-birthplace':['heritage','A portrait of the poet is not a photograph of her birthplace.'],
+    'ashranga-dighi':['water','No exact openly licensed photo was verified.'],
+    'nandail-dighi-joypurhat':['water','Nearby town photos were excluded because they do not show this dighi.'],
+    'hinda-kasba-shahi-mosque':['worship','No exact openly licensed photo was verified.'],
+    'bhimer-mayer-chula':['heritage','No exact openly licensed photo was verified.'],
+    'dholmacha-temple-kurigram':['worship','No exact openly licensed photo was verified.'],
+    'vhetorbond-zamindar-house':['heritage','No exact openly licensed photo was verified.'],
+    'bardhankuthi-zamindar-house':['heritage','No exact openly licensed photo was verified.'],
+    'shah-palowan-shrine':['worship','No exact openly licensed photo was verified.']
+  };
+  Object.keys(fallbacks).forEach(function(id){if(!d[id])return;d[id].status='fallback';d[id].photos=[];d[id].thumbnail='';d[id].fallbackImage='/assets/place-fallbacks/'+fallbacks[id][0]+'.svg';d[id].fallbackReason=fallbacks[id][1];});
+  window.AshoGhuriPlaceImageDB=d;
+})();

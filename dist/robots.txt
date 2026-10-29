@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /404.html
-Sitemap: https://asho-ghuri-bd.mahfuz085-cuet.chatgpt.site/sitemap.xml
+Disallow: /account.html
+Disallow: /saved.html
+Sitemap: https://ashoghuri.vercel.app/sitemap.xml

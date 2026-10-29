@@ -1,0 +1,9 @@
+{
+  "name": "ashoghuri-static-site",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "validate": "node scripts/validate.mjs"
+  }
+}
