@@ -41,3 +41,35 @@ header.page-seo-heading{position:static;top:auto;z-index:auto;background:transpa
 .commons-gallery .photo-thumb[aria-current="true"],.photo-showcase .photo-thumb[aria-current="true"]{border:2px solid #2e7047!important;box-shadow:0 0 0 2px #d3e5cc!important}
 html[data-theme="dark"] .commons-gallery .photo-showcase-controls button,html[data-theme="dark"] .photo-showcase .photo-showcase-controls button,html[data-theme="dark"] .commons-gallery .photo-thumb,html[data-theme="dark"] .photo-showcase .photo-thumb{background:#17221c;color:#edf3ea;border-color:#6f856f!important}
 @media(max-height:760px){#modalBackdrop .modal-head{padding:7px 14px!important}#modalBackdrop .modal-head .kicker{display:none}#modalBackdrop .modal-head h2{font-size:19px!important;line-height:1.25;margin:0!important}#modalBackdrop .modal-head p{font-size:11px;line-height:1.25;margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.commons-gallery .photo-stage,.photo-showcase .photo-stage{height:clamp(140px,28vh,220px)}}
+/* Mobile header scrolls with the page; secondary links stay in the menu. */
+@media(max-width:650px){
+  header{position:relative!important;top:auto!important;backdrop-filter:none}
+  .nav{height:auto!important;min-height:64px;gap:8px;padding-top:8px;padding-bottom:8px}
+  .brand{flex:1 1 auto;min-width:0;gap:8px}
+  .brand-name{font-size:16px;line-height:1.15}
+  .brand-name small{font-size:8px;letter-spacing:.12em}
+  .nav-actions{flex:0 0 auto;gap:6px;margin-left:auto}
+  .nav-actions #favoritesBtn,.nav-actions .account-btn,.nav-actions .icon-btn{display:none!important}
+  .nav-actions .language-btn{min-height:38px;padding:7px 9px;font-size:11px;white-space:nowrap}
+  .nav-actions .theme-toggle,.nav-actions .mobile-menu{width:38px;height:38px;min-width:38px;padding:0}
+  .mobile-nav{position:absolute!important;top:100%!important;left:0!important;right:0!important;z-index:25!important;max-height:calc(100dvh - 72px);overflow-y:auto;overscroll-behavior:contain}
+  #modalBackdrop{width:100%;max-width:100%;overflow:hidden}
+  #modalBackdrop .modal{width:100%!important;max-width:100%!important;min-width:0!important;height:100dvh!important;max-height:100dvh!important;border-radius:0!important;overflow:hidden}
+  #modalBackdrop .modal-content{width:100%;max-width:100%;min-width:0;overflow-x:hidden!important;padding:10px 12px 22px!important;scrollbar-gutter:auto!important}
+  #modalContent{width:100%;max-width:100%;min-width:0;overflow-x:hidden!important}
+  #modalContent>*{max-width:100%;min-width:0}
+  #modalContent .commons-gallery,#modalContent .photo-showcase{box-sizing:border-box;width:100%;max-width:100%;min-width:0;margin:10px 0 14px!important;padding:10px!important;overflow:hidden}
+  #modalContent .commons-gallery .photo-stage,#modalContent .photo-showcase .photo-stage{box-sizing:border-box;width:100%;max-width:100%;height:clamp(170px,38vh,270px)!important;min-height:0!important;aspect-ratio:4/3;margin:0!important;padding:3px!important}
+  #modalContent .photo-stage-link,#modalContent .photo-stage-image{max-width:100%;width:100%;height:100%}
+  #modalContent .photo-stage-caption{left:12px;right:12px;bottom:12px}
+  #modalContent .photo-stage-caption strong{font-size:clamp(15px,4.5vw,20px)!important;overflow-wrap:anywhere}
+  #modalContent .photo-stage-caption span{font-size:10px!important;overflow-wrap:anywhere}
+  #modalContent .photo-showcase-controls{width:100%;max-width:100%;padding:8px 2px 7px;gap:6px;flex-wrap:wrap}
+  #modalContent .photo-showcase-controls button{min-width:34px;height:34px}
+  #modalContent .photo-showcase-controls .photo-toggle{margin-left:auto;padding:0 8px}
+  #modalContent .photo-thumbnails{display:flex;width:100%;max-width:100%;gap:6px;padding:8px 1px 10px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  #modalContent .photo-thumbnails .photo-thumb{flex:0 0 58px;width:58px;height:46px;scroll-snap-align:start}
+  #modalContent .photo-credit-line{padding:0 1px 6px;line-height:1.45;overflow-wrap:anywhere}
+  html[data-theme="dark"] .hero-actions .btn-primary{background:#276246!important;color:#fff!important;border:1px solid #72a985!important;box-shadow:0 8px 22px rgba(0,0,0,.28)}
+}
+@media(max-width:370px){.nav{gap:5px}.brand-name{font-size:15px}.brand-name small{font-size:7px}.nav-actions{gap:4px}.nav-actions .language-btn{padding:7px;font-size:10px}}
