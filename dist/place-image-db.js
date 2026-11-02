@@ -6093,3 +6093,15 @@ window.AshoGhuriPlaceImageDB = {
   Object.keys(fallbacks).forEach(function(id){if(!d[id])return;d[id].status='fallback';d[id].photos=[];d[id].thumbnail='';d[id].fallbackImage='/assets/place-fallbacks/'+fallbacks[id][0]+'.svg';d[id].fallbackReason=fallbacks[id][1];});
   window.AshoGhuriPlaceImageDB=d;
 })();
+
+/* Exact, reusable photo verified for Kochikhali in the Sundarbans East Sanctuary. */
+;(function(){
+  var d=window.AshoGhuriPlaceImageDB;
+  var title='Mangrove Forest Kachikhali Sundarban National Park Bangladesh - panoramio (1).jpg';
+  var thumbnail='https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Mangrove_Forest_Kachikhali_Sundarban_National_Park_Bangladesh_-_panoramio_%281%29.jpg/960px-Mangrove_Forest_Kachikhali_Sundarban_National_Park_Bangladesh_-_panoramio_%281%29.jpg';
+  d['kochikhali-tiger-point']={
+    id:'kochikhali-tiger-point',name:'Kochikhali Tiger Point',bn:'কচিখালী টাইগার পয়েন্ট',district:'Bagerhat',status:'curated_match',thumbnail:thumbnail,
+    photos:[{title:title,matchName:'Kachikhali, Sundarbans',thumbnail:thumbnail,page:'https://commons.wikimedia.org/wiki/File:Mangrove_Forest_Kachikhali_Sundarban_National_Park_Bangladesh_-_panoramio_(1).jpg',author:'Hiroki Ogawa',license:'CC BY 3.0',source:'Wikimedia Commons · geotagged in Kachikhali',reviewedAt:'2026-11-02'}],
+    searchUrl:'https://commons.wikimedia.org/wiki/Special:MediaSearch?type=image&search=Kachikhali%20Sundarbans%20Bangladesh'
+  };
+})();

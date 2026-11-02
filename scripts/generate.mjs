@@ -78,6 +78,10 @@ function normalizeAppPage(name, html) {
     html = html.replace(/<div class="hotline-sources">([\s\S]*?)<\/div>/, (_m, links) => `<details class="hotline-source-disclosure"><summary><span lang="en">Official contact sources · 8</span><span lang="bn">সরকারি যোগাযোগের সূত্র · ৮</span></summary><div class="hotline-sources">${links}</div></details>`);
   }
   html = html.replace(/<\/head>/i, `  <link rel="canonical" href="${esc(canonical)}">\n  ${robots}${og}\n  <link rel="manifest" href="/manifest.webmanifest">\n  <link rel="icon" type="image/svg+xml" href="/asho-ghuri-mark.svg">\n  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">\n  <link rel="apple-touch-icon" href="/icons/icon-192.png">\n  <link rel="stylesheet" href="/site-extras.css">\n</head>`);
+  html = html.replace(/<meta\s+name=["']google-site-verification["'][^>]*>/ig, '');
+  if (name === 'index.html') {
+    html = html.replace(/<\/head>/i, '  <meta name="google-site-verification" content="2A9GBDVUBb4EHR1uPaEhCVuAMNRIhvDUQdlgH9Vo6JY" />\n</head>');
+  }
   if (!html.includes('class="skip-link"')) html = html.replace(/<body([^>]*)>/i, (_m, attrs) => `<body${attrs}>\n<a class="skip-link" href="#main-content">Skip to main content</a>`);
   html = html.replace(/<main([^>]*)>/i, (_m, attrs) => {
     const next = /\bid=/.test(attrs) ? attrs.replace(/\bid=["'][^"']*["']/, 'id="main-content"') : `${attrs} id="main-content"`;
