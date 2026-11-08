@@ -65,10 +65,6 @@ function withThemeBootstrap(html) {
   return html.replace(/<head([^>]*)>/i, (_match, attrs) => `<head${attrs}>${themeBootstrap}`);
 }
 
-function compactBeforeSeoTags(html) {
-  return html.replace(/(?:\r?\n[\t ]*)+(?=  <link rel="canonical")/g, '\n');
-}
-
 function normalizeAppPage(name, html) {
   const [title, description] = appMeta[name];
   const canonicalPath = name === 'index.html' ? '/' : `/${name}`;
@@ -78,11 +74,11 @@ function normalizeAppPage(name, html) {
   const og = `\n  <meta property="og:type" content="website">\n  <meta property="og:site_name" content="AshoGhuri">\n  <meta property="og:title" content="${esc(title)}">\n  <meta property="og:description" content="${esc(description)}">\n  <meta property="og:url" content="${esc(canonical)}">\n  <meta property="og:image" content="${origin}/assets/og-ashoghuri.jpg">\n  <meta property="og:image:width" content="1200">\n  <meta property="og:image:height" content="630">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="${esc(title)}">\n  <meta name="twitter:description" content="${esc(description)}">\n  <meta name="twitter:image" content="${origin}/assets/og-ashoghuri.jpg">`;
   html = html.replace(/<title>[^<]*<\/title>/i, `<title>${esc(title)}</title>`)
     .replace(/<meta\s+name=["']description["'][^>]*>/i, `<meta name="description" content="${esc(description)}">`)
-    .replace(/<link\s+rel=["']canonical["'][^>]*>/ig, '')
-    .replace(/<link\s+rel=["']manifest["'][^>]*>/ig, '')
-    .replace(/<link\s+rel=["'](?:icon|apple-touch-icon)["'][^>]*>/ig, '')
-    .replace(/<link\s+rel=["']stylesheet["'][^>]*href=["']\/site-extras\.css["'][^>]*>/ig, '')
-    .replace(/<meta\s+(?:property|name)=["'](?:og:[^"']+|twitter:[^"']+|robots)["'][^>]*>/ig, '');
+    .replace(/^[\t ]*<link\s+rel=["']canonical["'][^>]*>[\t ]*(?:\r?\n|$)/gim, '')
+    .replace(/^[\t ]*<link\s+rel=["']manifest["'][^>]*>[\t ]*(?:\r?\n|$)/gim, '')
+    .replace(/^[\t ]*<link\s+rel=["'](?:icon|apple-touch-icon)["'][^>]*>[\t ]*(?:\r?\n|$)/gim, '')
+    .replace(/^[\t ]*<link\s+rel=["']stylesheet["'][^>]*href=["']\/site-extras\.css["'][^>]*>[\t ]*(?:\r?\n|$)/gim, '')
+    .replace(/^[\t ]*<meta\s+(?:property|name)=["'](?:og:[^"']+|twitter:[^"']+|robots)["'][^>]*>[\t ]*(?:\r?\n|$)/gim, '');
   if (name === 'safety.html' && !html.includes('hotline-source-disclosure')) {
     html = html.replace(/<div class="hotline-sources">([\s\S]*?)<\/div>/, (_m, links) => `<details class="hotline-source-disclosure"><summary><span lang="en">Official contact sources · 8</span><span lang="bn">সরকারি যোগাযোগের সূত্র · ৮</span></summary><div class="hotline-sources">${links}</div></details>`);
   }
@@ -115,7 +111,7 @@ function normalizeAppPage(name, html) {
     return `<video${safeAttrs} preload="none">`;
   });
   if (!html.includes('src="/site-runtime.js"')) html = html.replace(/<\/body>/i, `  <script src="/site-runtime.js" defer></script>\n</body>`);
-  return compactBeforeSeoTags(html.replace(/Md\.Iftee Raiyan/g,'Md. Iftee Raiyan'));
+  return html.replace(/Md\.Iftee Raiyan/g,'Md. Iftee Raiyan');
 }
 
 async function normalize404() {
