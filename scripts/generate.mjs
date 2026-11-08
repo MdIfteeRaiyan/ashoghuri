@@ -77,12 +77,12 @@ function normalizeAppPage(name, html) {
     .replace(/^[\t ]*<link\s+rel=["']canonical["'][^>]*>[\t ]*(?:\r?\n|$)/gim, '')
     .replace(/^[\t ]*<link\s+rel=["']manifest["'][^>]*>[\t ]*(?:\r?\n|$)/gim, '')
     .replace(/^[\t ]*<link\s+rel=["'](?:icon|apple-touch-icon)["'][^>]*>[\t ]*(?:\r?\n|$)/gim, '')
-    .replace(/^[\t ]*<link\s+rel=["']stylesheet["'][^>]*href=["']\/site-extras\.css["'][^>]*>[\t ]*(?:\r?\n|$)/gim, '')
+    .replace(/^[\t ]*<link\s+rel=["']stylesheet["'][^>]*href=["']\/site-extras\.css(?:\?[^"']*)?["'][^>]*>[\t ]*(?:\r?\n|$)/gim, '')
     .replace(/^[\t ]*<meta\s+(?:property|name)=["'](?:og:[^"']+|twitter:[^"']+|robots)["'][^>]*>[\t ]*(?:\r?\n|$)/gim, '');
   if (name === 'safety.html' && !html.includes('hotline-source-disclosure')) {
     html = html.replace(/<div class="hotline-sources">([\s\S]*?)<\/div>/, (_m, links) => `<details class="hotline-source-disclosure"><summary><span lang="en">Official contact sources · 8</span><span lang="bn">সরকারি যোগাযোগের সূত্র · ৮</span></summary><div class="hotline-sources">${links}</div></details>`);
   }
-  html = html.replace(/<\/head>/i, `  <link rel="canonical" href="${esc(canonical)}">\n  ${robots}${og}\n  <link rel="manifest" href="/manifest.webmanifest">\n  <link rel="icon" type="image/svg+xml" href="/asho-ghuri-mark.svg">\n  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">\n  <link rel="apple-touch-icon" href="/icons/icon-192.png">\n  <link rel="stylesheet" href="/site-extras.css">\n</head>`);
+  html = html.replace(/<\/head>/i, `  <link rel="canonical" href="${esc(canonical)}">\n  ${robots}${og}\n  <link rel="manifest" href="/manifest.webmanifest">\n  <link rel="icon" type="image/svg+xml" href="/asho-ghuri-mark.svg">\n  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">\n  <link rel="apple-touch-icon" href="/icons/icon-192.png">\n  <link rel="stylesheet" href="/site-extras.css?v=contrast-20261108">\n</head>`);
   html = withThemeBootstrap(html);
   // Keep the compact account footer free of duplicated help navigation.
   html = html.replace(/(<a href="how\.html">How it works<\/a>)\1/g, '$1');
@@ -121,7 +121,7 @@ async function normalize404() {
   html=html.replace('src="asho-ghuri-mark.svg?v=3"','src="/asho-ghuri-mark.svg"');
   if(!html.includes('max-width:100%;overflow-x:hidden'))html=html.replace(/<style>/i,'<style>*{box-sizing:border-box}html,body{max-width:100%;overflow-x:hidden}body{overflow-wrap:anywhere}.card{max-width:100%;padding:clamp(20px,6vw,36px)}');
   html=html.replace(/<link\s+rel=["'](?:icon|apple-touch-icon)["'][^>]*>/ig,'').replace(/<link\s+rel=["']stylesheet["'][^>]*site-extras\.css[^>]*>/ig,'');
-  html=html.replace(/<\/head>/i,'<link rel="icon" type="image/svg+xml" href="/asho-ghuri-mark.svg"><link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png"><link rel="stylesheet" href="/site-extras.css"></head>');
+  html=html.replace(/<\/head>/i,'<link rel="icon" type="image/svg+xml" href="/asho-ghuri-mark.svg"><link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png"><link rel="stylesheet" href="/site-extras.css?v=contrast-20261108"></head>');
   if(!html.includes('class="skip-link"'))html=html.replace(/<body([^>]*)>/i,'<body$1><a class="skip-link" href="#main-content">Skip to main content</a>');
   html=html.replace(/<main([^>]*)>/i,(_m,attrs)=>`<main${/\bid=/.test(attrs)?attrs.replace(/\bid=["'][^"']*["']/,'id="main-content"'):`${attrs} id="main-content"`}>`);
   html=html.replace(/href="index\.html"/g,'href="/"').replace(/href="places\.html"/g,'href="/places.html"').replace(/href="planner\.html"/g,'href="/planner.html"');

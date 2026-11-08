@@ -296,3 +296,27 @@ html[data-theme="dark"] #modalContent .cost-plan-range>p{color:#d0dbd1!important
 .hero-actions>.btn-primary:focus-visible{outline:3px solid #e7bd52!important;outline-offset:4px!important}
 @media(max-width:420px){.hero-actions>.btn-primary{min-width:min(190px,100%);min-height:52px;padding-inline:16px!important;font-size:14px!important}}
 @media(max-width:520px){#modalContent .budget-panel{padding:13px!important}#modalContent .budget-panel-head{display:grid;grid-template-columns:minmax(0,1fr);gap:6px}#modalContent .budget-status-pill{justify-self:start}#modalContent .cost-plan-head>b{font-size:13px!important}#modalContent .cost-plan-state{font-size:10px!important}}
+
+/* Final contrast guard: these rules follow legacy modal colors and win in both themes. */
+html[data-theme="light"] body #modalContent .cost-plan-value,
+html[data-theme="light"] body #modalContent .cost-plan-value *,
+html[data-theme="light"] body #modalContent .cost-plan-detail span,
+html[data-theme="light"] body #modalContent .cost-plan-detail span b,
+html[data-theme="light"] body #modalContent .cost-plan-row small{color:#263b30!important}
+html[data-theme="light"] body #modalContent .cost-plan-detail summary,
+html[data-theme="light"] body #modalContent .cost-plan-extra>summary{color:#155a3b!important}
+html[data-theme="dark"] body #modalContent .cost-plan-value,
+html[data-theme="dark"] body #modalContent .cost-plan-value *,
+html[data-theme="dark"] body #modalContent .cost-plan-detail span,
+html[data-theme="dark"] body #modalContent .cost-plan-detail span b,
+html[data-theme="dark"] body #modalContent .cost-plan-row small{color:#e4eee5!important}
+html[data-theme="dark"] body #modalContent .cost-plan-detail summary,
+html[data-theme="dark"] body #modalContent .cost-plan-extra>summary{color:#c6edcf!important}
+html[data-theme="dark"] body #modalContent .cost-plan-known_estimate .cost-plan-state{background:#23422d!important;color:#e0f5e2!important;border-color:#5d9469!important}
+html[data-theme="dark"] body #modalContent .cost-plan-needs_quote .cost-plan-state{background:#4b3a1d!important;color:#ffe7b2!important;border-color:#9b8244!important}
+html[data-theme="dark"] body #modalContent .cost-plan-not_priced .cost-plan-state{background:#2d3931!important;color:#e0e8e1!important;border-color:#718276!important}
+html[data-theme="dark"] body #modalContent .cost-plan-not_applicable .cost-plan-state{background:#263743!important;color:#e0f0f8!important;border-color:#6b8796!important}
+html[data-theme="light"] body .hero-actions>.btn-primary,
+html[data-theme="dark"] body .hero-actions>.btn-primary{background:#174f3b!important;color:#fff!important;border-color:#9bcfb0!important}
+html[data-theme="light"] body .hero-actions>.btn-primary *,
+html[data-theme="dark"] body .hero-actions>.btn-primary *{color:#fff!important;text-shadow:none!important;opacity:1!important;filter:none!important}
