@@ -59,6 +59,15 @@ const split = value => String(value || '').split(/[·|]/).map(s => s.trim()).fil
 const langs = (en, bn, cls='') => `<span class="${cls}" lang="en">${esc(en)}</span><span class="${cls}" lang="bn">${esc(bn)}</span>`;
 const publicFiles = new Set(['index.html','planner.html','places.html','community.html','memories.html','safety.html','how.html','fares.html','privacy.html']);
 const pageTitles = Object.fromEntries(Object.entries(appMeta).map(([name, m]) => [name, m[0]]));
+const themeBootstrap = `<script data-agh-theme-boot>(function(){var t="light";try{var s=localStorage.getItem("ashoghuri-theme");if(s==="dark"||s==="light")t=s;else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)t="dark"}catch(e){}document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t})();</script>`;
+function withThemeBootstrap(html) {
+  html = html.replace(/<script\s+data-agh-theme-boot>[\s\S]*?<\/script>/ig, '');
+  return html.replace(/<head([^>]*)>/i, (_match, attrs) => `<head${attrs}>${themeBootstrap}`);
+}
+
+function compactBeforeSeoTags(html) {
+  return html.replace(/(?:\r?\n[\t ]*)+(?=  <link rel="canonical")/g, '\n');
+}
 
 function normalizeAppPage(name, html) {
   const [title, description] = appMeta[name];
@@ -78,10 +87,9 @@ function normalizeAppPage(name, html) {
     html = html.replace(/<div class="hotline-sources">([\s\S]*?)<\/div>/, (_m, links) => `<details class="hotline-source-disclosure"><summary><span lang="en">Official contact sources · 8</span><span lang="bn">সরকারি যোগাযোগের সূত্র · ৮</span></summary><div class="hotline-sources">${links}</div></details>`);
   }
   html = html.replace(/<\/head>/i, `  <link rel="canonical" href="${esc(canonical)}">\n  ${robots}${og}\n  <link rel="manifest" href="/manifest.webmanifest">\n  <link rel="icon" type="image/svg+xml" href="/asho-ghuri-mark.svg">\n  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">\n  <link rel="apple-touch-icon" href="/icons/icon-192.png">\n  <link rel="stylesheet" href="/site-extras.css">\n</head>`);
-  html = html.replace(/<meta\s+name=["']google-site-verification["'][^>]*>/ig, '');
-  if (name === 'index.html') {
-    html = html.replace(/<\/head>/i, '  <meta name="google-site-verification" content="2A9GBDVUBb4EHR1uPaEhCVuAMNRIhvDUQdlgH9Vo6JY" />\n</head>');
-  }
+  html = withThemeBootstrap(html);
+  // Keep the compact account footer free of duplicated help navigation.
+  html = html.replace(/(<a href="how\.html">How it works<\/a>)\1/g, '$1');
   if (!html.includes('class="skip-link"')) html = html.replace(/<body([^>]*)>/i, (_m, attrs) => `<body${attrs}>\n<a class="skip-link" href="#main-content">Skip to main content</a>`);
   html = html.replace(/<main([^>]*)>/i, (_m, attrs) => {
     const next = /\bid=/.test(attrs) ? attrs.replace(/\bid=["'][^"']*["']/, 'id="main-content"') : `${attrs} id="main-content"`;
@@ -107,7 +115,7 @@ function normalizeAppPage(name, html) {
     return `<video${safeAttrs} preload="none">`;
   });
   if (!html.includes('src="/site-runtime.js"')) html = html.replace(/<\/body>/i, `  <script src="/site-runtime.js" defer></script>\n</body>`);
-  return html.replace(/Md\.Iftee Raiyan/g,'Md. Iftee Raiyan');
+  return compactBeforeSeoTags(html.replace(/Md\.Iftee Raiyan/g,'Md. Iftee Raiyan'));
 }
 
 async function normalize404() {
@@ -116,7 +124,7 @@ async function normalize404() {
   html=html.replace('href="asho-ghuri-mark.svg?v=3"','href="/asho-ghuri-mark.svg"');
   html=html.replace('src="asho-ghuri-mark.svg?v=3"','src="/asho-ghuri-mark.svg"');
   if(!html.includes('max-width:100%;overflow-x:hidden'))html=html.replace(/<style>/i,'<style>*{box-sizing:border-box}html,body{max-width:100%;overflow-x:hidden}body{overflow-wrap:anywhere}.card{max-width:100%;padding:clamp(20px,6vw,36px)}');
-  html=html.replace(/<link\s+rel=["']icon["'][^>]*icon-192\.png[^>]*>/ig,'').replace(/<link\s+rel=["']stylesheet["'][^>]*site-extras\.css[^>]*>/ig,'');
+  html=html.replace(/<link\s+rel=["'](?:icon|apple-touch-icon)["'][^>]*>/ig,'').replace(/<link\s+rel=["']stylesheet["'][^>]*site-extras\.css[^>]*>/ig,'');
   html=html.replace(/<\/head>/i,'<link rel="icon" type="image/svg+xml" href="/asho-ghuri-mark.svg"><link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png"><link rel="stylesheet" href="/site-extras.css"></head>');
   if(!html.includes('class="skip-link"'))html=html.replace(/<body([^>]*)>/i,'<body$1><a class="skip-link" href="#main-content">Skip to main content</a>');
   html=html.replace(/<main([^>]*)>/i,(_m,attrs)=>`<main${/\bid=/.test(attrs)?attrs.replace(/\bid=["'][^"']*["']/,'id="main-content"'):`${attrs} id="main-content"`}>`);
@@ -174,11 +182,11 @@ function placePage(place) {
 await mkdir(path.join(out,'destination'),{recursive:true});
 await mkdir(path.join(out,'destinations'),{recursive:true});
 for (const place of places) {
-  await writeFile(path.join(out,'destination',`${place.id}.html`),placePage(place));
+  await writeFile(path.join(out,'destination',`${place.id}.html`),withThemeBootstrap(placePage(place)));
 }
 const directoryCards = places.map(place => { const plan=expensePlans[place.id]; const coverage=plan?.tripTotal?.knownLineCount||0; const access=costs[place.id]?.items?.length===0; const label=access?'Access restricted · check before travel · প্রবেশ সীমিত, যাওয়ার আগে নিশ্চিত করুন':coverage?`${coverage} sourced cost estimate(s) · full trip quote needed · ${coverage}টি সূত্রসহ খরচের অনুমান, পূর্ণ কোট প্রয়োজন`:'Expense checklist available · quotes needed · খরচের তালিকা আছে, কোট প্রয়োজন'; return `<article class="destination-card" data-search="${esc(`${place.name} ${place.bn} ${place.district} ${place.division} ${place.area||''}`.toLocaleLowerCase())}" data-division="${esc(place.division)}"><a href="/destination/${encodeURIComponent(place.id)}.html"><span class="division">${esc(place.division)} · ${esc(place.district)}</span><h2>${esc(place.name)} <span lang="bn">${esc(place.bn)}</span></h2><p>${esc(place.short || '')}</p><p lang="bn">${esc(place.bnShort || '')}</p><span class="directory-cost">${esc(label)}</span></a></article>`; }).join('\n');
 const directoryHtml = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Browse all 175 Bangladesh destination guides by place, district or division in English and Bangla."><link rel="canonical" href="${origin}/destinations/"><meta name="robots" content="index,follow,max-image-preview:large"><meta property="og:type" content="website"><meta property="og:site_name" content="AshoGhuri"><meta property="og:title" content="All 175 Bangladesh destinations — AshoGhuri"><meta property="og:description" content="Search bilingual destination guides by district and division."><meta property="og:url" content="${origin}/destinations/"><meta property="og:image" content="${origin}/assets/og-ashoghuri.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="All Bangladesh destinations — AshoGhuri"><meta name="twitter:description" content="Search bilingual destination guides by district and division."><meta name="twitter:image" content="${origin}/assets/og-ashoghuri.jpg"><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" type="image/svg+xml" href="/asho-ghuri-mark.svg"><link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png"><link rel="stylesheet" href="/site-extras.css"><title>All Bangladesh destinations — AshoGhuri</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Manrope:wght@600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet"></head><body><a class="skip-link" href="#main-content">Skip to main content</a><header class="site-nav"><a href="/" class="brand">AshoGhuri</a><nav aria-label="Main"><a href="/places.html">Explore</a><a href="/planner.html">Plan a trip</a><a href="/safety.html">Safety</a></nav></header><main id="main-content" class="directory-page"><p class="page-kicker">ASHOGHURI · DESTINATION INDEX</p><h1>Explore places across Bangladesh <span lang="bn">বাংলাদেশের ভ্রমণ গন্তব্য</span></h1><p class="lead">Browse all ${places.length} place guides. Search works without JavaScript; filtering is an optional enhancement.</p><p class="lead bn" lang="bn">সব ${places.length}টি স্থানের গাইড দেখুন। জাভাস্ক্রিপ্ট বন্ধ থাকলেও গন্তব্যের তালিকা থাকবে।</p><form class="directory-controls" role="search" onsubmit="return false"><label for="destinationSearch">Find a place, district or division · স্থান, জেলা বা বিভাগ খুঁজুন</label><input id="destinationSearch" type="search" placeholder="Search in English or বাংলা"><label for="divisionFilter">Division · বিভাগ</label><select id="divisionFilter"><option value="">All divisions · সব বিভাগ</option>${[...new Set(places.map(p=>p.division))].sort().map(v=>`<option>${esc(v)}</option>`).join('')}</select><p id="directoryCount" aria-live="polite">${places.length} destinations</p></form><section class="directory-grid" aria-label="Destination guides">${directoryCards}</section></main><script>const q=document.getElementById('destinationSearch'),d=document.getElementById('divisionFilter'),c=document.getElementById('directoryCount'),cards=[...document.querySelectorAll('.destination-card')];function filter(){let n=0;for(const card of cards){const ok=card.dataset.search.includes(q.value.trim().toLocaleLowerCase())&&(!d.value||card.dataset.division===d.value);card.hidden=!ok;if(ok)n++}c.textContent=n+' destinations'}q.addEventListener('input',filter);d.addEventListener('change',filter);</script><script src="/site-runtime.js" defer></script></body></html>`;
-await writeFile(path.join(out,'destinations','index.html'),directoryHtml);
+await writeFile(path.join(out,'destinations','index.html'),withThemeBootstrap(directoryHtml));
 
 const htmlNames = (await readdir(out)).filter(name => name.endsWith('.html'));
 for (const name of htmlNames) {
