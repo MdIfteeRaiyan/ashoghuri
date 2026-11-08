@@ -197,7 +197,7 @@
   function installDestinationExpenseDistribution(){
     var host=document.getElementById("modalContent");if(!host)return;
     function compactCostAmount(value){var s=String(value||"").trim();if(!s)return"";s=s.replace(/^[^:]{3,110}:\s*/,"").split(";")[0].trim();s=s.replace(/\s*[·|]\s*(?:official listed rate|vehicle fare reference|effective date unstated|reported rate|guide reference).*$/i,"").trim();return s.length>90?s.slice(0,87).trimEnd()+"…":s}
-    function renderExpenseLine(item){var name=lang()==="bn"?item.bnLabel:item.label,state=lang()==="bn"?item.bnStateLabel:item.stateLabel,detail=lang()==="bn"?item.bnNote:item.note,amount=item.amount,reference=item.referenceAmount,empty=lang()==="bn"?(item.state==="needs_quote"?"তারিখসহ বর্তমান দর নিশ্চিত করুন":item.state==="not_applicable"?"এই পরিকল্পনায় অন্তর্ভুক্ত নয়":"নির্ভরযোগ্য প্রকাশিত দর নেই"):(item.state==="needs_quote"?"Confirm a current dated price":item.state==="not_applicable"?"Not included in this plan":"No reliable public price");var costValue=amount?'<span class="cost-plan-amount">'+esc(compactCostAmount(amount))+'</span>':reference?'<span class="cost-plan-empty">'+(lang()==="bn"?"পুরোনো সূত্র · বর্তমান দর নয়":"Historical reference · not a current fare")+'</span>':'<span class="cost-plan-empty">'+esc(empty)+'</span>';return '<tr class="cost-plan-row cost-plan-'+esc(item.state)+'"><td colspan="2"><div class="cost-plan-card"><div class="cost-plan-head"><b>'+esc(name)+'</b><small class="cost-plan-state">'+esc(state)+'</small></div><div class="cost-plan-value">'+costValue+'</div><details class="cost-plan-detail"><summary>'+(lang()==="bn"?"খরচের বিস্তারিত":"Cost details")+'</summary><span>'+(amount?'<b>'+(lang()==="bn"?"প্রকাশিত সূত্র: ":"Published reference: ")+esc(amount)+'</b><br>':"")+esc(detail)+'</span></details></div></td></tr>'}
+    function renderExpenseLine(item){var name=lang()==="bn"?item.bnLabel:item.label,state=lang()==="bn"?item.bnStateLabel:item.stateLabel,detail=lang()==="bn"?item.bnNote:item.note,amount=item.amount,reference=item.referenceAmount,empty=lang()==="bn"?(item.state==="needs_quote"?"তারিখসহ বর্তমান দর নিশ্চিত করুন":item.state==="not_applicable"?"এই পরিকল্পনায় অন্তর্ভুক্ত নয়":"নির্ভরযোগ্য প্রকাশিত দর নেই"):(item.state==="needs_quote"?"Confirm a current dated price":item.state==="not_applicable"?"Not included in this plan":"No reliable public price");var costValue=amount?'<span class="cost-plan-amount">'+esc(compactCostAmount(amount))+'</span>':reference?'<span class="cost-plan-empty">'+(lang()==="bn"?"পুরোনো সূত্র · বর্তমান দর নয়":"Historical reference · not a current fare")+'</span>':'<span class="cost-plan-empty">'+esc(empty)+'</span>';return '<tr class="cost-plan-row cost-plan-'+esc(item.state)+'"><td colspan="2"><div class="cost-plan-card"><div class="cost-plan-head"><b>'+esc(name)+'</b><small class="cost-plan-state">'+esc(state)+'</small></div><div class="cost-plan-value">'+costValue+'</div><details class="cost-plan-detail"><summary>'+(lang()==="bn"?"দর ও খরচের ব্যাখ্যা":"Price basis & notes")+'</summary><span>'+(amount?'<b>'+(lang()==="bn"?"প্রকাশিত সূত্র: ":"Published reference: ")+esc(amount)+'</b><br>':"")+esc(detail)+'</span></details></div></td></tr>'}
     function render(force){
       var image=host.querySelector("img[data-place-photo-id]"),table=host.querySelector(".budget-breakdown"),id=image&&image.dataset.placePhotoId,plan=id&&window.AshoGhuriPlaceExpensePlanDB&&window.AshoGhuriPlaceExpensePlanDB[id];
       if(!table||!plan||(!force&&table.dataset.aghExpenseDistribution===id))return;
@@ -236,7 +236,36 @@
     html[data-theme="dark"] .safety-jumps,html[data-theme="dark"] .guide-card,html[data-theme="dark"] .weather-panel,html[data-theme="dark"] .hotline-panel{background:#19231e!important;color:#edf3ea!important;border-color:#304039!important;box-shadow:0 12px 30px rgba(0,0,0,.16)}html[data-theme="dark"] .safety-jumps a,html[data-theme="dark"] .weather-current,html[data-theme="dark"] .weather-day,html[data-theme="dark"] .hotline-card{background:#111a15!important;color:#edf3ea!important;border-color:#35453c!important}html[data-theme="dark"] .safety-jumps span,html[data-theme="dark"] .guide-card p,html[data-theme="dark"] .guide-card li,html[data-theme="dark"] .weather-panel-head p,html[data-theme="dark"] .weather-controls label,html[data-theme="dark"] .weather-status,html[data-theme="dark"] .weather-current-main span,html[data-theme="dark"] .weather-metrics span,html[data-theme="dark"] .weather-day small,html[data-theme="dark"] .weather-foot small,html[data-theme="dark"] .hotline-panel-head p,html[data-theme="dark"] .hotline-card small,html[data-theme="dark"] .hotline-sources a,html[data-theme="dark"] .hotline-checked,html[data-theme="dark"] .trust-note{color:#b7c5b9!important}html[data-theme="dark"] .trust-note.safety-disclaimer{background:#25281e!important;border-color:#484b39!important;color:#ded6a5!important}html[data-theme="dark"] .safety-jumps a,html[data-theme="dark"] .weather-foot a,html[data-theme="dark"] .safety-link{color:#a9d0b1!important}html[data-theme="dark"] .weather-metrics span{background:#111a15!important;border-color:#35453c!important}html[data-theme="dark"] .weather-sun{background:#3a3322!important;color:#e4bc70!important}html[data-theme="dark"] .hotline-card.hotline-primary{background:#1c5c49!important;color:#fff!important;border-color:#35735c!important}html[data-theme="dark"] .hotline-card.hotline-primary small{color:#d6e8c9!important}html[data-theme="dark"] .hotline-mark{background:#26382d!important;color:#b5d0b8!important}html[data-theme="dark"] .hotline-sources{border-color:#304039!important}
   `;document.head.appendChild(finishStyle);
   var polishStyle=document.createElement("style");polishStyle.textContent=`
+    /* One clear cost disclosure; all line items, estimates and sources stay together. */
+    #modalContent .budget-panel{padding:0!important;overflow:hidden}
+    #modalContent .budget-panel>.budget-disclosure{display:block}
+    #modalContent .budget-panel .budget-disclosure>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 16px;list-style:none;cursor:pointer}
+    #modalContent .budget-panel .budget-disclosure>summary::-webkit-details-marker{display:none}
+    #modalContent .budget-panel .budget-disclosure>summary:after{content:"+";
+      display:grid;place-items:center;flex:0 0 26px;width:26px;height:26px;
+      border:1px solid #a6b9a5;border-radius:50%;color:#174f3b;font-size:17px;line-height:1}
+    #modalContent .budget-panel .budget-disclosure[open]>summary:after{content:"−"}
+    #modalContent .budget-panel .budget-disclosure>summary:focus-visible{outline:3px solid #739d67;outline-offset:-3px}
+    #modalContent .budget-panel .budget-disclosure-body{padding:0 14px 14px;border-top:1px solid #dce4d8}
+    #modalContent .budget-panel .budget-disclosure-body .cost-plan-range{margin-top:10px}
+    #modalContent .budget-panel .budget-disclosure-body .budget-breakdown{margin-top:8px}
+    #modalContent .budget-disclosure-label{display:block;margin-bottom:3px;color:#52675b;font-size:10px;font-weight:800;letter-spacing:.04em}
+    html[data-theme="dark"] #modalContent .budget-disclosure-label{color:#c0cec2!important}
+    html[data-theme="dark"] #modalContent .budget-panel .budget-disclosure>summary:after{color:#e3f1e4;border-color:#6d8972}
+    html[data-theme="dark"] #modalContent .budget-panel .budget-disclosure-body{border-color:#405548}
+    html[data-theme="light"] body .nav-links a:hover,html[data-theme="light"] body .nav-links a:focus-visible,
+    html[data-theme="light"] body .mobile-nav a:hover,html[data-theme="light"] body .mobile-nav a:focus-visible{background:#174f3b!important;color:#fff!important}
+    html[data-theme="dark"] body .nav-links a:hover,html[data-theme="dark"] body .nav-links a:focus-visible,
+    html[data-theme="dark"] body .mobile-nav a:hover,html[data-theme="dark"] body .mobile-nav a:focus-visible{background:#b8e3c2!important;color:#10251a!important}
+    html[data-theme="light"] body .nav-links a[aria-current="page"],html[data-theme="light"] body .mobile-nav a[aria-current="page"]{background:#174f3b!important;color:#fff!important}
+    html[data-theme="dark"] body .nav-links a[aria-current="page"],html[data-theme="dark"] body .mobile-nav a[aria-current="page"]{background:#b8e3c2!important;color:#10251a!important}
+    @media(max-width:940px){.nav{gap:12px}.nav-links{display:none!important}.mobile-menu{display:grid!important;place-items:center}.brand{flex:1 1 auto;min-width:0}.nav-actions{flex:0 0 auto;gap:7px}}
+    @media(prefers-reduced-motion:reduce){#modalContent .budget-panel .budget-disclosure>summary{scroll-behavior:auto}}
     /* Keep route changes steady: fade only, with no page or modal translation. */
+    .travel-desk .desk-card,.travel-desk .desk-card b,.travel-desk .desk-card small{animation:none!important}
+    .travel-desk.agh-desk-visible .desk-heading,.travel-desk.agh-desk-visible .desk-card{animation:agh-scroll-fade .28s ease both!important;transform:none!important;filter:none!important}
+    .travel-desk.agh-desk-visible .desk-card{animation-delay:var(--agh-desk-delay,0ms)!important}
+    @keyframes agh-scroll-fade{from{opacity:0}to{opacity:1}}
     @view-transition{navigation:auto}
     ::view-transition-old(root){animation:agh-route-out .10s ease both!important}
     ::view-transition-new(root){animation:agh-route-in .18s ease both!important}
@@ -368,5 +397,20 @@
       #modalContent .photo-stage{width:100%!important;max-width:100%!important;height:clamp(165px,34svh,260px)!important;min-height:0!important;margin:0!important;aspect-ratio:4/3!important}
     }
     @media(prefers-reduced-motion:reduce){.travel-desk.agh-desk-pending .desk-heading,.travel-desk.agh-desk-pending .desk-card{opacity:1!important}.travel-desk.agh-desk-visible .desk-heading,.travel-desk.agh-desk-visible .desk-card{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}}
+  `;mobilePolishStyle.textContent+=`
+    @media(max-width:650px){
+      .nav{height:auto!important;min-height:64px;padding-block:8px!important;gap:7px!important}
+      .brand{gap:8px!important}.brand-mark{width:36px!important;height:36px!important;flex:0 0 36px!important}
+      .brand-name{font-size:16px!important;line-height:1.2!important}.brand-name small{font-size:8px!important;letter-spacing:.1em!important}
+      .nav-actions{gap:6px!important}.nav-actions .account-btn{display:none!important}
+      .nav-actions .icon-btn{width:36px!important;height:36px!important;justify-content:center!important;padding:0!important;border-radius:50%!important;font-size:0!important}
+      .nav-actions .icon-btn .heart{font-size:17px!important}.nav-actions .icon-btn #savedCount{font-size:9px!important}
+      .nav-actions .language-btn{min-width:44px!important;height:36px!important;padding:0 8px!important;font-size:11px!important}
+      .mobile-menu{width:36px!important;height:36px!important;flex:0 0 36px!important;padding:0!important}
+      #mobileNav{top:64px!important}
+      #modalContent .budget-panel .budget-disclosure>summary{align-items:flex-start;padding:13px 12px}
+      #modalContent .budget-panel .budget-disclosure-body{padding:0 11px 12px}
+    }
+    @media(max-width:370px){.brand-name{font-size:15px!important}.nav-actions{gap:4px!important}}
   `;document.head.appendChild(mobilePolishStyle);
 })();
