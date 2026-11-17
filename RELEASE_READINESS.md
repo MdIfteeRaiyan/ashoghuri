@@ -25,3 +25,33 @@ Review date: 8 November 2026
 3. Run keyboard and screen-reader checks on the deployed site, including the mobile menu, photo gallery, planner, memory preview, account form, and errors/empty states.
 4. Test on current Android and iOS phones, slow network, dark/light switching, and reduced-motion settings; verify third-party weather and image providers in production.
 5. If enabling accounts, public memories, or companion matching, add authentication, consent, moderation, abuse handling, and privacy controls before collecting or publishing user data.
+
+## Hackathon build review
+
+The judge demo starts at Places and follows a destination into the budget
+calculator and the day-by-day trip pass. Use Lalbagh Fort as a reproducible
+example. In the budget calculator, enter Dhaka as the origin, Lalbagh Fort
+as the destination, two travelers, and a sample outbound cost of BDT 500
+per person. With the default 10% contingency, the partial group subtotal
+is BDT 1,100. The sample amount is for demonstrating arithmetic.
+
+Open the trip pass, add a trip name, and use the same origin, first
+destination, start date, mode, group size and duration as the budget form.
+Save the pass locally. Download the standalone HTML pass before presenting
+if venue connectivity may be weak. Use the imported expense states to show
+which amounts are estimates and which still require a quote.
+
+This build fixes Tour Memories rendering, keyboard autocomplete, invalid
+budget inputs, expense scope in trip-pass exports, and stale or failed
+planner forecasts. It also fixes service-worker response caching and the
+destination directory's description of offline browsing.
+
+Local desktop browser checks covered keyboard selection of Lalbagh Fort,
+a sample budget subtotal, rejection of a negative fare, and saving a trip.
+Production Vercel, external providers and real mobile devices still need a
+smoke check. The AI assistant remains proposed hackathon work. Live fares,
+companion matching and account sync remain outside this static build.
+
+For an existing Vercel project, merge the updated source into its connected
+Git repository and keep the existing build settings. Run `npm run generate`
+and `npm run validate` from the repository root before publishing.
